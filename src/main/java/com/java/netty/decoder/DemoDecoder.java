@@ -42,7 +42,6 @@ public class DemoDecoder extends ByteToMessageDecoder {
         byte[] bytes = new byte[dataLength];
         in.readBytes(bytes);
         DemoMessage deserialize = ProtostuffKit.deserialize(bytes, DemoMessage.class);
-        log.info(new String(bytes, UTF_8));
         out.add(deserialize);
     }
 }
