@@ -24,6 +24,7 @@ public class DemoDecoder extends ByteToMessageDecoder {
         if (in.readableBytes() < length) {
             return;
         }
+        in.markReaderIndex();
         // 获取到标志头
         byte[] headBytes = new byte[length];
         in.readBytes(headBytes);
@@ -34,6 +35,10 @@ public class DemoDecoder extends ByteToMessageDecoder {
         log.info("版本号为: {}", new String(versionBytes, UTF_8));
         int dataLength = in.readInt();
         log.info("数据长度为: {}", dataLength);
+        if (in.readableBytes() < dataLength) {
+            in.resetReaderIndex();
+            return;
+        }
         byte[] bytes = new byte[dataLength];
         in.readBytes(bytes);
         DemoMessage deserialize = ProtostuffKit.deserialize(bytes, DemoMessage.class);

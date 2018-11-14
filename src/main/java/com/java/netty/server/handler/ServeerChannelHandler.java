@@ -6,6 +6,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
+import static io.netty.util.CharsetUtil.UTF_8;
+
 /**
  * @author g5niusx
  */
@@ -16,7 +18,11 @@ public class ServeerChannelHandler extends SimpleChannelInboundHandler<DemoMessa
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DemoMessage msg) throws Exception {
-        log.info(msg.toString());
+        String s = new String(msg.getData(), UTF_8);
+        log.info("接收到消息: {}", s);
+        DemoMessage message = new DemoMessage();
+        message.setData("你好".getBytes(UTF_8));
+        ctx.writeAndFlush(message);
     }
 
 
