@@ -12,9 +12,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @ChannelHandler.Sharable
 @Slf4j
-public class SimpleClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class SimpleClientHandler extends SimpleChannelInboundHandler<String> {
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         String message = "测试";
         // 由于没有使用任何的管道，所以向channel中写入数据的时候，要使用ByteBuf,否则会造成消息无法发送
         ByteBuf byteBuf = Unpooled.copiedBuffer(message, UTF_8);
@@ -22,7 +22,7 @@ public class SimpleClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
-        log.info("客户端接收到: {}", byteBuf.toString(UTF_8));
+    protected void channelRead0(ChannelHandlerContext ctx, String msg) {
+        log.info("客户端接收到: {}", msg);
     }
 }

@@ -1,13 +1,14 @@
-package com.java.netty.simple.demo;
+package com.java.netty.delimiter;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -32,9 +33,10 @@ public class SimpleServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new StringDecoder(UTF_8));
+                        // 设置来制表符为特殊的分隔符
+                        ByteBuf byteBuf = Unpooled.copiedBuffer("\t".getBytes(UTF_8));
+                        ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, byteBuf));
                         ch.pipeline().addLast(new SimpleServerHandler());
-                        ch.pipeline().addLast(new StringEncoder(UTF_8));
                     }
                 })
                 .bind(PORT).addListener(future -> {
