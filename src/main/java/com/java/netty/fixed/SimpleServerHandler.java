@@ -1,4 +1,4 @@
-package com.java.netty.delimiter;
+package com.java.netty.fixed;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -16,10 +16,7 @@ public class SimpleServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        StringBuilder message = new StringBuilder("你好，客户端");
-        while (message.toString().getBytes(UTF_8).length < 1024) {
-            message.append(" ");
-        }
+        String  message = "你好，客户端\t";
         ByteBuf byteBuf = Unpooled.copiedBuffer(message, UTF_8);
         ctx.writeAndFlush(byteBuf);
     }
