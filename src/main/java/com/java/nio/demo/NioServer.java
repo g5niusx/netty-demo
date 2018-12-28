@@ -21,19 +21,15 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 @Slf4j
 public class NioServer {
-    private static final Integer             PORT = 8888;
-    /**
-     * 服务端channel
-     */
-    private              ServerSocketChannel serverSocketChannel;
+    private static final Integer  PORT = 8888;
     /**
      * 多路复用器
      */
-    private              Selector            selector;
+    private              Selector selector;
 
     private NioServer() throws Exception {
         // 打开channel
-        serverSocketChannel = ServerSocketChannel.open();
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
         // 设置为非阻塞channel,这样才能注册到多路复用器中
         serverSocketChannel.configureBlocking(false);
         // 绑定端口
@@ -139,6 +135,6 @@ public class NioServer {
     }
 
     public static void main(String[] args) throws Exception {
-        NioServer nioServer = new NioServer();
+        new NioServer();
     }
 }
