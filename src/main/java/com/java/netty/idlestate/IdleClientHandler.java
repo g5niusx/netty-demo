@@ -1,4 +1,4 @@
-package com.java.netty.Idlestate;
+package com.java.netty.idlestate;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
