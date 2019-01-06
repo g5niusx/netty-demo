@@ -16,7 +16,10 @@ public class SimpleServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        String  message = "你好，客户端\t";
+        StringBuilder message = new StringBuilder("你好，客户端");
+        while (message.toString().getBytes(UTF_8).length < 1024) {
+            message.append(" ");
+        }
         ByteBuf byteBuf = Unpooled.copiedBuffer(message, UTF_8);
         ctx.writeAndFlush(byteBuf);
     }

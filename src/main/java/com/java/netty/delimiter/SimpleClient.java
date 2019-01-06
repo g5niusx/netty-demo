@@ -1,11 +1,15 @@
 package com.java.netty.delimiter;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.FixedLengthFrameDecoder;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * 客户端
@@ -29,8 +33,9 @@ public class SimpleClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
-                        // 定义消息的长度为1024
-                        ch.pipeline().addLast(new FixedLengthFrameDecoder(1024));
+                        // 设置来制表符为特殊的分隔符
+                        ByteBuf byteBuf = Unpooled.copiedBuffer("\t".getBytes(UTF_8));
+                        ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, byteBuf));
                         ch.pipeline().addLast(new SimpleClientHandler());
                     }
                 })
