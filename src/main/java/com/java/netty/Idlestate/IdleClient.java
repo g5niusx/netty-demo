@@ -1,40 +1,36 @@
-package com.java.netty.simple.demo;
+package com.java.netty.Idlestate;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import java.util.concurrent.TimeUnit;
 
 /**
- * 客户端
+ * 心跳客户端实例
  *
  * @author g5niusx
  */
-public class SimpleClient {
+public class IdleClient {
 
     private static final int    PORT = 9999;
     private static final String IP   = "127.0.0.1";
 
 
     public static void main(String[] args) throws InterruptedException {
-        // 客户端不需要监听端口，只需要一个线程池来发送消息
         NioEventLoopGroup nioEventLoopGroup = new NioEventLoopGroup();
-        // 创建一个引导器
-        Bootstrap bootstrap = new Bootstrap();
+        Bootstrap         bootstrap         = new Bootstrap();
         bootstrap.group(nioEventLoopGroup)
-                // 指定使用哪种channel来处理消息,分别有nio，oio等
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
-                        ch.pipeline().addLast(new StringDecoder(UTF_8));
-                        ch.pipeline().addLast(new SimpleClientHandler());
-                        ch.pipeline().addLast(new StringEncoder(UTF_8));
+                        // 当3秒没有进行读写的时候，就会触发心跳,心跳的处理类要放在第一个
+                        ch.pipeline().addLast(new IdleStateHandler(0, 0, 3, TimeUnit.SECONDS));
+                        ch.pipeline().addLast(new IdleClientHandler());
                     }
                 })
                 .connect(IP, PORT).channel().closeFuture().sync();
