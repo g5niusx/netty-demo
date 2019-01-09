@@ -29,7 +29,7 @@ public class IdleClient {
                     @Override
                     protected void initChannel(SocketChannel ch) {
                         // 当3秒没有进行读写的时候，就会触发心跳,心跳的处理类要放在第一个
-                        ch.pipeline().addLast(new IdleStateHandler(0, 0, 3, TimeUnit.SECONDS));
+                        ch.pipeline().addFirst(new IdleStateHandler(0, 0, 3, TimeUnit.SECONDS));
                         ch.pipeline().addLast(new IdleClientHandler());
                     }
                 })
