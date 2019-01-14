@@ -1,6 +1,7 @@
 package com.java.netty.custom;
 
 import com.java.netty.custom.protocol.CustomProtocol;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * 服务端处理
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class CustomServerHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
