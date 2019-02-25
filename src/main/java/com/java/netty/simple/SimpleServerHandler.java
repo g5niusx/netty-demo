@@ -25,4 +25,9 @@ public class SimpleServerHandler extends SimpleChannelInboundHandler<String> {
     protected void channelRead0(ChannelHandlerContext ctx, String msg) {
         log.info("服务器接收到:{}", msg);
     }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        log.info("ip:[{}]的用户已经连接",ctx.channel().remoteAddress());
+    }
 }
