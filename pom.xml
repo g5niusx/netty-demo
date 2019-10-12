@@ -21,7 +21,7 @@
     </build>
 
     <properties>
-        <netty.version>4.1.31.Final</netty.version>
+        <netty.version>4.1.42.Final</netty.version>
         <lombok.version>1.18.4</lombok.version>
         <blade-log.version>0.1.6</blade-log.version>
         <slf4j-api.version>1.7.25</slf4j-api.version>
